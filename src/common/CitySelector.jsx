@@ -168,7 +168,7 @@ Suggest.propTypes = {
   onSelect: PropTypes.func.isRequired,
 }
 
-export default function CitySelector(props) {
+const CitySelector = memo(function CitySelector(props) {
   const {
     show,
     cityData,
@@ -183,11 +183,11 @@ export default function CitySelector(props) {
   const key = useMemo(() => searchKey.trim(), [searchKey]) // 去掉空白
 
   useEffect(() => {
-      if (!show || cityData || isLoading) {
-          return
-      }
+    if (!show || cityData || isLoading) {
+      return
+    }
 
-      fetchCityData()
+    fetchCityData()
   }, [show, cityData, isLoading])
 
   const toAlpha = useCallback(alpha => {
@@ -249,7 +249,7 @@ export default function CitySelector(props) {
       {outputCitySections()}
     </div>
   )
-}
+})
 
 CitySelector.propTypes = {
   show: PropTypes.bool.isRequired,
@@ -259,3 +259,5 @@ CitySelector.propTypes = {
   fetchCityData: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
 }
+
+export default CitySelector
