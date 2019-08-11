@@ -14,7 +14,7 @@ import useNav from '../common/useNav'
 import Header from '../common/Header'
 import Nav from '../common/Nav'
 import List from './List'
-// import Bottom from './Bottom'
+import Bottom from './Bottom'
 
 import {
   setFrom,
@@ -171,6 +171,24 @@ function App(props) {
     nextDate
   )
 
+  const bottomCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        toggleOrderType,
+        toggleHighSpeed,
+        toggleOnlyTickets,
+        toggleIsFiltersVisible,
+        setCheckedTicketTypes,
+        setCheckedTrainTypes,
+        setCheckedDepartStations,
+        setCheckedArriveStations,
+        setDepartTimeStart,
+        setDepartTimeEnd,
+        setArriveTimeStart,
+        setArriveTimeEnd,
+      }, dispatch)
+  }, [])
+
   if (!searchParsed) { // 如果解析未完成，不渲染任何数据
     return null
   }
@@ -188,6 +206,25 @@ function App(props) {
         next={next}
       />
       <List list={trainList} />
+      <Bottom
+        highSpeed={highSpeed}
+        orderType={orderType}
+        onlyTickets={onlyTickets}
+        isFiltersVisible={isFiltersVisible}
+        ticketTypes={ticketTypes}
+        trainTypes={trainTypes}
+        departStations={departStations}
+        arriveStations={arriveStations}
+        checkedTicketTypes={checkedTicketTypes}
+        checkedTrainTypes={checkedTrainTypes}
+        checkedDepartStations={checkedDepartStations}
+        checkedArriveStations={checkedArriveStations}
+        departTimeStart={departTimeStart}
+        departTimeEnd={departTimeEnd}
+        arriveTimeStart={arriveTimeStart}
+        arriveTimeEnd={arriveTimeEnd}
+        {...bottomCbs}
+      />
     </div>
   )
 }

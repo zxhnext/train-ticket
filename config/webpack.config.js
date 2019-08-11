@@ -26,6 +26,8 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; // 打包分析
+
 const postcssNormalize = require('postcss-normalize');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
@@ -168,7 +170,9 @@ module.exports = function(webpackEnv) {
         : isEnvDevelopment && 'static/js/[name].chunk.js',
       // We inferred the "public path" (such as / or /my-project) from homepage.
       // We use "/" in development.
-      publicPath: publicPath,
+      publicPath: 'production' !== process.env.NODE_ENV || 'true' === process.env.USE_LOCAL_FILES
+          ? '/'
+          : 'https://www.cdn.com/',// publicPath
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
@@ -479,6 +483,11 @@ module.exports = function(webpackEnv) {
     },
     plugins: [
       // Generates an `index.html` file with the <script> injected.
+      process.env.GENERATE_BUNDLE_ANALYZER === 'true' &&
+        new BundleAnalyzerPlugin({
+          openAnalyzer: false, // 禁止打开服务器
+          analyzerMode: 'static', // 生成静态html文件
+        }),
       new HtmlWebpackPlugin(
         Object.assign(
           {},

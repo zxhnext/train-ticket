@@ -1,152 +1,100 @@
-export const ACTION_SET_FROM = 'SET_FROM';
-export const ACTION_SET_TO = 'SET_TO';
-export const ACTION_SET_IS_CITY_SELECTOR_VISIBLE = 'SET_IS_CITY_SELECTOR_VISIBLE';
-export const ACTION_SET_CURRENT_SELECTING_LEFT_CITY = 'SET_CURRENT_SELECTING_LEFT_CITY';
-export const ACTION_SET_CITY_DATA = 'SET_CITY_DATA';
-export const ACTION_SET_IS_LOADING_CITY_DATA = 'SET_IS_LOADING_CITY_DATA';
-export const ACTION_SET_IS_DATE_SELECTOR_VISIBLE = 'SET_IS_DATE_SELECTOR_VISIBLE';
-export const ACTION_SET_HIGH_SPEED = 'SET_HIGH_SPEED';
-export const ACTION_SET_DEPART_DATE = 'SET_DEPART_DATE';
-
-export function setFrom(from) {
-  return {
-      type: ACTION_SET_FROM,
-      payload: from,
-  };
-}
-
-export function setTo(to) {
-  return {
-      type: ACTION_SET_TO,
-      payload: to,
-  };
-}
-
-export function setIsLoadingCityData(isLoadingCityData) {
-  return {
-      type: ACTION_SET_IS_LOADING_CITY_DATA,
-      payload: isLoadingCityData,
-  };
-}
-
-export function setCityData(cityDate) {
-  return {
-      type: ACTION_SET_CITY_DATA,
-      payload: cityDate,
-  };
-}
-
-export function toggleHighSpeed() {
-  return (dispatch, getState) => {
-      const { highSpeed } = getState();
-      dispatch({
-          type: ACTION_SET_HIGH_SPEED,
-          payload: !highSpeed,
-      });
-  };
-}
-
-export function showCitySelector(currentSelectingLeftCity) {
-  return dispatch => {
-      dispatch({
-          type: ACTION_SET_IS_CITY_SELECTOR_VISIBLE,
-          payload: true,
-      });
-
-      dispatch({
-          type: ACTION_SET_CURRENT_SELECTING_LEFT_CITY,
-          payload: currentSelectingLeftCity,
-      });
-  };
-}
-
-export function hideCitySelector() {
-  return {
-      type: ACTION_SET_IS_CITY_SELECTOR_VISIBLE,
-      payload: false,
-  };
-}
-
-export function setSelectedCity(city) {
-  return (dispatch, getState) => {
-      const { currentSelectingLeftCity } = getState();
-
-      if (currentSelectingLeftCity) {
-          dispatch(setFrom(city));
-      } else {
-          dispatch(setTo(city));
-      }
-
-      dispatch(hideCitySelector());
-  };
-}
-
-export function showDateSelector() {
-  return {
-      type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-      payload: true,
-  };
-}
-
-export function hideDateSelector() {
-  return {
-      type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-      payload: false,
-  };
-}
-
-export function exchangeFromTo() {
-  return (dispatch, getState) => {
-      const { from, to } = getState();
-      dispatch(setFrom(to));
-      dispatch(setTo(from));
-  };
-}
+import { h0 } from '../common/fp'
+export const ACTION_SET_DEPART_DATE = 'SET_DEPART_DATE'
+export const ACTION_SET_ARRIVE_DATE = 'SET_ARRIVE_DATE'
+export const ACTION_SET_DEPART_TIME_STR = 'SET_DEPART_TIME_STR'
+export const ACTION_SET_ARRIVE_TIME_STR = 'SET_ARRIVE_TIME_STR'
+export const ACTION_SET_DEPART_STATION = 'SET_DEPART_STATION'
+export const ACTION_SET_ARRIVE_STATION = 'SET_ARRIVE_STATION'
+export const ACTION_SET_TRAIN_NUMBER = 'SET_TRAIN_NUMBER'
+export const ACTION_SET_DURATION_STR = 'SET_DURATION_STR'
+export const ACTION_SET_TICKETS = 'SET_TICKETS'
+export const ACTION_SET_IS_SCHEDULE_VISIBLE = 'SET_IS_SCHEDULE_VISIBLE'
+export const ACTION_SET_SEARCH_PARSED = 'SET_SEARCH_PARSED'
 
 export function setDepartDate(departDate) {
   return {
-      type: ACTION_SET_DEPART_DATE,
-      payload: departDate,
-  };
+    type: ACTION_SET_DEPART_DATE,
+    payload: departDate,
+  }
 }
-
-export function fetchCityData() {
+export function setArriveDate(arriveDate) {
+  return {
+    type: ACTION_SET_ARRIVE_DATE,
+    payload: arriveDate,
+  }
+}
+export function setDepartTimeStr(departTimeStr) {
+  return {
+    type: ACTION_SET_DEPART_TIME_STR,
+    payload: departTimeStr,
+  }
+}
+export function setArriveTimeStr(arriveTimeStr) {
+  return {
+    type: ACTION_SET_ARRIVE_TIME_STR,
+    payload: arriveTimeStr,
+  }
+}
+export function setDepartStation(departStation) {
+  return {
+    type: ACTION_SET_DEPART_STATION,
+    payload: departStation,
+  }
+}
+export function setArriveStation(arriveStation) {
+  return {
+    type: ACTION_SET_ARRIVE_STATION,
+    payload: arriveStation,
+  }
+}
+export function setTrainNumber(trainNumber) {
+  return {
+    type: ACTION_SET_TRAIN_NUMBER,
+    payload: trainNumber,
+  }
+}
+export function setDurationStr(durationStr) {
+  return {
+    type: ACTION_SET_DURATION_STR,
+    payload: durationStr,
+  }
+}
+export function setTickets(tickets) {
+  return {
+    type: ACTION_SET_TICKETS,
+    payload: tickets,
+  }
+}
+export function setIsScheduleVisible(isScheduleVisible) {
+  return {
+    type: ACTION_SET_IS_SCHEDULE_VISIBLE,
+    payload: isScheduleVisible,
+  }
+}
+export function toggleIsScheduleVisible() {
   return (dispatch, getState) => {
-      const { isLoadingCityData } = getState();
+    const { isScheduleVisible } = getState()
 
-      if (isLoadingCityData) {
-          return;
-      }
+    dispatch(setIsScheduleVisible(!isScheduleVisible))
+  }
+}
+export function setSearchParsed(searchParsed) {
+  return {
+    type: ACTION_SET_SEARCH_PARSED,
+    payload: searchParsed,
+  }
+}
+export function nextDate() {
+  return (dispatch, getState) => {
+    const { departDate } = getState()
 
-      const cache = JSON.parse(
-          localStorage.getItem('city_data_cache') || '{}'
-      );
+    dispatch(setDepartDate(h0(departDate) + 86400 * 1000))
+  }
+}
+export function prevDate() {
+  return (dispatch, getState) => {
+    const { departDate } = getState()
 
-      if (Date.now() < cache.expires) {
-          dispatch(setCityData(cache.data));
-
-          return;
-      }
-
-      dispatch(setIsLoadingCityData(true));
-
-      fetch('/rest/cities?_' + Date.now())
-          .then(res => res.json())
-          .then(cityData => {
-              dispatch(setCityData(cityData));
-
-              localStorage.setItem(
-                  'city_data_cache',
-                  JSON.stringify({
-                      expires: Date.now() + 60 * 1000,
-                      data: cityData,
-                  })
-              );
-
-              dispatch(setIsLoadingCityData(false));
-          })
-          .catch(() => {
-              dispatch(setIsLoadingCityData(false));
-          });
-  };
+    dispatch(setDepartDate(h0(departDate) - 86400 * 1000))
+  }
 }
